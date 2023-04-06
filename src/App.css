@@ -1,0 +1,208 @@
+@font-face {
+  font-family: BasierCircle;
+  src: url("./../BasierCircle-Regular.otf") format("opentype");
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+}
+
+body {
+  font-size: 1.6rem !important;
+  font-family: BasierCircle !important;
+}
+
+.app {
+  padding: 3rem 2rem;
+  background: linear-gradient(to right, #33425e, #000000);
+}
+
+.app .container-fluid {
+  display: flex;
+  color: #fff;
+  width: 100%;
+}
+
+/* Left Section  */
+
+.left-section {
+  width: 15%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.logo__container {
+  display: flex;
+}
+
+.logo {
+  color: #fff;
+}
+
+.left-nav {
+  padding-left: 0;
+}
+
+.left-nav a {
+  text-decoration: none;
+  display: block;
+  color: #fff;
+  opacity: 0.4;
+}
+
+.left-nav a:first-child {
+  margin-top: 2.8rem;
+}
+
+.left-nav a:not(:last-child) {
+  margin-bottom: 2.4rem;
+}
+
+.left-nav a:hover {
+  color: #fff;
+  opacity: 1;
+}
+
+.left-nav a:focus,
+.left-nav a:active {
+  outline: none;
+}
+
+.profile-pic {
+  width: 4.8rem;
+  height: 4.8rem;
+}
+
+/* Mid Section  */
+
+.mid-section {
+  width: 25%;
+}
+
+.mid-section__top-part {
+  padding: 0 2rem;
+}
+
+.mid-section h2 {
+  font-size: 3.2rem;
+  font-weight: 700;
+}
+
+.search {
+  background-color: rgba(255, 255, 255, 0.08);
+  padding: 1rem 1.4rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  margin-top: 2.4rem;
+  justify-content: space-between;
+}
+
+.search input {
+  background-color: transparent;
+  border: none;
+  font-size: 1.8rem;
+  color: #fff;
+}
+
+.search input::placeholder {
+  color: #fff;
+  opacity: 0.6;
+}
+
+.search input:focus,
+.search input:active {
+  outline: none;
+}
+
+.search__icon {
+  font-size: 1.93rem;
+  opacity: 0.6;
+}
+
+/* Song Component  */
+
+.song {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+}
+
+.song:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 0.8rem;
+  cursor: pointer;
+}
+
+.song:first-child {
+  margin-top: 4.4rem;
+}
+
+.song__container {
+  display: flex;
+  align-items: center;
+}
+
+.song__container img {
+  width: 4.8rem;
+  height: 4.8rem;
+  margin-right: 1.6rem;
+  border-radius: 3rem;
+}
+
+.song__container h4 {
+  color: #fff;
+  font-size: 1.8rem;
+  margin-bottom: 0;
+}
+.song__container p {
+  color: #fff;
+  font-size: 1.4rem;
+  opacity: 0.6;
+  margin-bottom: 0;
+}
+
+.song__duration {
+  font-size: 1.8rem;
+  color: #fff;
+  opacity: 0.6;
+}
+
+/* Right Section  */
+
+.right-section {
+  width: 60%;
+}
+
+.right-section__content {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  width: 60%;
+  margin: 0 auto;
+  padding-top: 5rem;
+}
+
+.right-section__content h2 {
+  font-size: 3.2rem;
+  font-weight: 700;
+}
+
+.right-section p {
+  font-size: 1.6rem;
+  opacity: 0.6;
+  margin-bottom: 4rem;
+}
+
+.right-section__pic {
+  width: 48rem;
+  height: 48rem;
+}
