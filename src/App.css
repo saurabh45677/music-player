@@ -206,3 +206,78 @@ body {
   width: 48rem;
   height: 48rem;
 }
+
+/* Player Component  */
+
+.component {
+  display: flex;
+  justify-content: space-between;
+  width: 91%;
+  margin-top: 4.1rem;
+}
+
+.component button:active,
+.component button:focus {
+  outline: none;
+}
+
+.playButton {
+  background-color: transparent;
+  border: none;
+}
+
+.prev-button,
+.next-button {
+  opacity: 0.8;
+}
+
+.prev-button {
+  margin-right: 3.6rem;
+}
+
+.next-button {
+  margin-left: 3.6rem;
+}
+
+.three-dot__button,
+.volume__button {
+  border: none;
+  background-color: transparent;
+  height: 4.8rem;
+  width: 4.8rem;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 4rem;
+}
+
+.three-dot,
+.volume-button {
+  color: #fff;
+  font-size: 2rem;
+}
+
+.time {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 91%;
+}
+
+.sound-seek {
+  margin-top: 2.4rem;
+}
+
+input[type="range"] {
+  background-color: rgb(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  width: 91% !important;
+  height: 6px;
+  appearance: none;
+}
+
+input[type="range"]:focus {
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+}

@@ -7,6 +7,7 @@ import Song from "./components/Song";
 import SongPic from "./assets/song-cover.png";
 import ReactJkMusicPlayer from "react-jinke-music-player";
 import "react-jinke-music-player/assets/index.css";
+import Player from "./components/Player";
 
 function App() {
   return (
@@ -56,7 +57,7 @@ function App() {
                 alt="Song Cover Pic"
                 className="right-section__pic"
               />
-              <ReactJkMusicPlayer theme="light" />
+              <Player />
             </div>
           </div>
         </div>
