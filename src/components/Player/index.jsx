@@ -12,16 +12,18 @@ import { HiDotsHorizontal, HiVolumeUp } from "react-icons/hi";
 
 const Player = ({ songURL, name }) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  // console.log(name, songURL);
-  const [play, { pause, duration, sound }] = useSound(songURL);
-  const [time, setTime] = useState({
-    min: 0,
-    sec: 0,
-  });
-  const [currTime, setCurrTime] = useState({
-    min: 0,
-    sec: 0,
-  });
+
+  const [play, { pause, duration, sound }] = useSound(
+    "https://storage.googleapis.com/similar_sentences/Imagine%20Dragons%20-%20West%20Coast%20(Pendona.com).mp3"
+  );
+  // const [time, setTime] = useState({
+  //   min: 0,
+  //   sec: 0,
+  // });
+  // const [currTime, setCurrTime] = useState({
+  //   min: 0,
+  //   sec: 0,
+  // });
   const [seconds, setSeconds] = useState(0);
 
   const playingButton = () => {
@@ -34,32 +36,32 @@ const Player = ({ songURL, name }) => {
     }
   };
 
-  useEffect(() => {
-    if (duration) {
-      const sec = duration / 1000;
-      const min = Math.floor(sec / 60);
-      const secRemain = Math.floor(sec % 60);
-      setTime({
-        min: min,
-        sec: secRemain,
-      });
-    }
-  }, [isPlaying, duration]);
+  // useEffect(() => {
+  //   if (duration) {
+  //     const sec = duration / 1000;
+  //     const min = Math.floor(sec / 60);
+  //     const secRemain = Math.floor(sec % 60);
+  //     setTime({
+  //       min: min,
+  //       sec: secRemain,
+  //     });
+  //   }
+  // }, [duration]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (sound) {
-        setSeconds(sound.seek([]));
-        const min = Math.floor(sound.seek([]) / 60);
-        const sec = Math.floor(sound.seek([]) % 60);
-        setCurrTime({
-          min,
-          sec,
-        });
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [sound]);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (sound) {
+  //       setSeconds(sound.seek([]));
+  //       const min = Math.floor(sound.seek([]) / 60);
+  //       const sec = Math.floor(sound.seek([]) % 60);
+  //       setCurrTime({
+  //         min,
+  //         sec,
+  //       });
+  //     }
+  //   }, 1000);
+  //   return () => clearInterval(interval);
+  // }, [sound]);
 
   return (
     <>

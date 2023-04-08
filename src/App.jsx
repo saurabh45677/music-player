@@ -4,10 +4,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ProfilePic from "./assets/profile-pic.png";
 import { FiSearch } from "react-icons/fi";
 import ReactJkMusicPlayer from "react-jinke-music-player";
+import { BiMenuAltRight } from "react-icons/bi";
 import "react-jinke-music-player/assets/index.css";
 import { useQuery, gql } from "@apollo/client";
 import { useEffect, useState } from "react";
 import ActivePlayer from "./components/ActivePlayer";
+import { RxCrossCircled } from "react-icons/rx";
 
 const ALL_SONGS = gql`
   query {
@@ -26,6 +28,7 @@ function App() {
   const [fetchedSongs, setfetchedSongs] = useState([]);
   const [activeSong, setActiveSong] = useState();
   const [searchterm, setSearchterm] = useState(" ");
+  const [showMobileNav, setShowMobileNav] = useState(false);
 
   const result = useQuery(ALL_SONGS);
 
@@ -34,6 +37,13 @@ function App() {
       setfetchedSongs(result.data.getSongs);
     }
   }, [result]);
+
+  const durationInSeconds = (duration) => {
+    let formattedDuration = duration / 60;
+    let finalDuration = Math.trunc(formattedDuration);
+    let minute = duration - finalDuration * 60;
+    return `${finalDuration}:${minute}`;
+  };
 
   return (
     <div className="app">
@@ -52,6 +62,11 @@ function App() {
           </div>
 
           <img src={ProfilePic} className="profile-pic" alt="Profile Pic" />
+
+          <BiMenuAltRight
+            className="mobile-nav"
+            onClick={() => setShowMobileNav((prevState) => !prevState)}
+          />
         </div>
         <div className="mid-section">
           <div className="mid-section__top-part">
@@ -88,13 +103,67 @@ function App() {
                       <p>{el.artist}</p>
                     </div>
                   </div>
-                  <p className="song__duration">{el.duration}</p>
+                  <p className="song__duration">
+                    {durationInSeconds(el.duration)}
+                  </p>
                 </div>
               ))}
           </div>
         </div>
         <ActivePlayer song={activeSong ? activeSong : fetchedSongs[0]} />
       </div>
+
+      {showMobileNav ? (
+        <div className="mobile-navigation">
+          <div className="mid-section__top-part">
+            <div className="mobile-navigation__title-container">
+              <h2>For You</h2>
+              <RxCrossCircled
+                className="close-nav"
+                onClick={() => setShowMobileNav(false)}
+              />
+            </div>
+            <div className="search">
+              <input
+                placeholder="Search song, artist"
+                onChange={({ target }) => setSearchterm(target.value)}
+              />
+              <FiSearch className="search__icon" />
+            </div>
+          </div>
+          <div className="playlist">
+            {fetchedSongs
+              .filter((val) => {
+                if (searchterm == " ") {
+                  return val.title;
+                } else if (
+                  val.title.toLowerCase().includes(searchterm.toLowerCase())
+                ) {
+                  return val.title;
+                }
+              })
+              .map((el, idx) => (
+                <div
+                  className="song"
+                  key={idx}
+                  onClick={() => {
+                    setActiveSong(el);
+                    setShowMobileNav(false);
+                  }}
+                >
+                  <div className="song__container">
+                    <img src={el.photo} alt="Song Pic" className="song--pic" />
+                    <div className="song__info">
+                      <h4>{el.title}</h4>
+                      <p>{el.artist}</p>
+                    </div>
+                  </div>
+                  <p className="song__duration">{el.duration}</p>
+                </div>
+              ))}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
