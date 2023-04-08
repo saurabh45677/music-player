@@ -3,13 +3,38 @@ import SpotifyIcon from "./assets/spotify-icon.svg";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ProfilePic from "./assets/profile-pic.png";
 import { FiSearch } from "react-icons/fi";
-import Song from "./components/Song";
-import SongPic from "./assets/song-cover.png";
 import ReactJkMusicPlayer from "react-jinke-music-player";
 import "react-jinke-music-player/assets/index.css";
-import Player from "./components/Player";
+import { useQuery, gql } from "@apollo/client";
+import { useEffect, useState } from "react";
+import ActivePlayer from "./components/ActivePlayer";
+
+const ALL_SONGS = gql`
+  query {
+    getSongs(playlistId: 1) {
+      _id
+      artist
+      duration
+      photo
+      title
+      url
+    }
+  }
+`;
 
 function App() {
+  const [fetchedSongs, setfetchedSongs] = useState([]);
+  const [activeSong, setActiveSong] = useState();
+  const [searchterm, setSearchterm] = useState(" ");
+
+  const result = useQuery(ALL_SONGS);
+
+  useEffect(() => {
+    if (result.loading === false) {
+      setfetchedSongs(result.data.getSongs);
+    }
+  }, [result]);
+
   return (
     <div className="app">
       <div className="container-fluid">
@@ -32,35 +57,43 @@ function App() {
           <div className="mid-section__top-part">
             <h2>For You</h2>
             <div className="search">
-              <input placeholder="Search song, artist" />
+              <input
+                placeholder="Search song, artist"
+                onChange={({ target }) => setSearchterm(target.value)}
+              />
               <FiSearch className="search__icon" />
             </div>
           </div>
           <div className="playlist">
-            <Song title="Starboy" artist="The Weekend" duration="4:16" />
-            <Song title="Starboy" artist="The Weekend" duration="4:16" />
-            <Song title="Starboy" artist="The Weekend" duration="4:16" />
-            <Song title="Starboy" artist="The Weekend" duration="4:16" />
-            <Song title="Starboy" artist="The Weekend" duration="4:16" />
-            <Song title="Starboy" artist="The Weekend" duration="4:16" />
-            <Song title="Starboy" artist="The Weekend" duration="4:16" />
-            <Song title="Starboy" artist="The Weekend" duration="4:16" />
+            {fetchedSongs
+              .filter((val) => {
+                if (searchterm == " ") {
+                  return val.title;
+                } else if (
+                  val.title.toLowerCase().includes(searchterm.toLowerCase())
+                ) {
+                  return val.title;
+                }
+              })
+              .map((el, idx) => (
+                <div
+                  className="song"
+                  key={idx}
+                  onClick={() => setActiveSong(el)}
+                >
+                  <div className="song__container">
+                    <img src={el.photo} alt="Song Pic" className="song--pic" />
+                    <div className="song__info">
+                      <h4>{el.title}</h4>
+                      <p>{el.artist}</p>
+                    </div>
+                  </div>
+                  <p className="song__duration">{el.duration}</p>
+                </div>
+              ))}
           </div>
         </div>
-        <div className="right-section">
-          <div className="right-section__content">
-            <h2>Ghost Stories</h2>
-            <p>Artist</p>
-            <div>
-              <img
-                src={SongPic}
-                alt="Song Cover Pic"
-                className="right-section__pic"
-              />
-              <Player />
-            </div>
-          </div>
-        </div>
+        <ActivePlayer song={activeSong ? activeSong : fetchedSongs[0]} />
       </div>
     </div>
   );

@@ -10,9 +10,10 @@ import { MdPauseCircleFilled } from "react-icons/md";
 import { IconContext } from "react-icons";
 import { HiDotsHorizontal, HiVolumeUp } from "react-icons/hi";
 
-const Player = () => {
+const Player = ({ songURL, name }) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [play, { pause, duration, sound }] = useSound(harharShambhu);
+  // console.log(name, songURL);
+  const [play, { pause, duration, sound }] = useSound(songURL);
   const [time, setTime] = useState({
     min: 0,
     sec: 0,
