@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import useSound from "use-sound";
-import harharShambhu from "./../../assets/harharShambhu.mp3";
 import {
   TbPlayerTrackPrevFilled,
   TbPlayerTrackNextFilled,
@@ -16,59 +15,33 @@ const Player = ({ songURL, name }) => {
   const [play, { pause, duration, sound }] = useSound(
     "https://storage.googleapis.com/similar_sentences/Imagine%20Dragons%20-%20West%20Coast%20(Pendona.com).mp3"
   );
-  // const [time, setTime] = useState({
-  //   min: 0,
-  //   sec: 0,
-  // });
-  // const [currTime, setCurrTime] = useState({
-  //   min: 0,
-  //   sec: 0,
-  // });
   const [seconds, setSeconds] = useState(0);
 
   const playingButton = () => {
     if (isPlaying) {
-      pause(); // this will pause the audio
+      pause();
       setIsPlaying(false);
     } else {
-      play(); // this will play the audio
+      play();
       setIsPlaying(true);
     }
   };
 
-  // useEffect(() => {
-  //   if (duration) {
-  //     const sec = duration / 1000;
-  //     const min = Math.floor(sec / 60);
-  //     const secRemain = Math.floor(sec % 60);
-  //     setTime({
-  //       min: min,
-  //       sec: secRemain,
-  //     });
-  //   }
-  // }, [duration]);
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     if (sound) {
-  //       setSeconds(sound.seek([]));
-  //       const min = Math.floor(sound.seek([]) / 60);
-  //       const sec = Math.floor(sound.seek([]) % 60);
-  //       setCurrTime({
-  //         min,
-  //         sec,
-  //       });
-  //     }
-  //   }, 1000);
-  //   return () => clearInterval(interval);
-  // }, [sound]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (sound) {
+        setSeconds(sound.seek([]));
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [sound]);
 
   return (
     <>
       <div className="sound-seek">
         <input
           type="range"
-          min="0"
+          min={0}
           max={duration / 1000}
           default="0"
           value={seconds}
@@ -84,7 +57,7 @@ const Player = ({ songURL, name }) => {
           </button>
         </div>
         <div>
-          <button className="playButton">
+          <button className="playButton" onClick={() => playingButton()}>
             <IconContext.Provider value={{ size: "1.6em", color: "#fff" }}>
               <TbPlayerTrackPrevFilled className="prev-button" />
             </IconContext.Provider>
@@ -102,7 +75,7 @@ const Player = ({ songURL, name }) => {
               </IconContext.Provider>
             </button>
           )}
-          <button className="playButton">
+          <button className="playButton" onClick={() => playingButton()}>
             <IconContext.Provider value={{ size: "1.6em", color: "#fff" }}>
               <TbPlayerTrackNextFilled className="next-button" />
             </IconContext.Provider>

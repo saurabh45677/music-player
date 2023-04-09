@@ -20,7 +20,7 @@ body {
 
 .app {
   padding: 3rem 2rem;
-  background: linear-gradient(to right, #33425e, #000000);
+  /* background: linear-gradient(to right, #33425e, #000000); */
 }
 
 .mobile-nav {
@@ -285,6 +285,10 @@ input[type="range"]:focus {
 
 input[type="range"]::-webkit-slider-thumb {
   appearance: none;
+  height: 1.5rem;
+  width: 1.5rem;
+  border-radius: 1rem;
+  background: #fff !important;
 }
 
 .mobile-navigation {

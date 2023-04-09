@@ -1,5 +1,4 @@
 import Player from "../Player";
-import SongPic from "./../../assets/song-cover.png";
 
 const ActivePlayer = ({ song }) => {
   return (

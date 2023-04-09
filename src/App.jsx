@@ -3,7 +3,6 @@ import SpotifyIcon from "./assets/spotify-icon.svg";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ProfilePic from "./assets/profile-pic.png";
 import { FiSearch } from "react-icons/fi";
-import ReactJkMusicPlayer from "react-jinke-music-player";
 import { BiMenuAltRight } from "react-icons/bi";
 import "react-jinke-music-player/assets/index.css";
 // import { useQuery, gql } from "@apollo/client";
@@ -12,19 +11,7 @@ import ActivePlayer from "./components/ActivePlayer";
 import { RxCrossCircled } from "react-icons/rx";
 import { useQuery } from "react-query";
 import axios from "axios";
-
-// const ALL_SONGS = gql`
-//   query {
-//     getSongs(playlistId: 1) {
-//       _id
-//       artist
-//       duration
-//       photo
-//       title
-//       url
-//     }
-//   }
-// `;
+import imageToGradient from "image-to-gradient";
 
 const endpoint = "https://api.ss.dev/resource/api";
 
@@ -43,11 +30,20 @@ const ALL_SONGS = `
 
 function App() {
   const [fetchedSongs, setfetchedSongs] = useState([]);
+  const [filteredSongs, setFilteredSongs] = useState([]);
   const [activeSong, setActiveSong] = useState();
-  const [searchterm, setSearchterm] = useState(" ");
+  const [searchterm, setSearchterm] = useState("");
   const [showMobileNav, setShowMobileNav] = useState(false);
 
-  const { data, isLoading, error } = useQuery("launches", () => {
+  const [gradient, setGradient] = useState("");
+  const [activeCurrentPic, setActiveCurrentPic] = useState("");
+
+  var options = {
+    angle: 10, // gradient angle in degrees
+    steps: 64, // number of steps
+  };
+
+  useQuery("launches", () => {
     return axios({
       url: endpoint,
       method: "POST",
@@ -58,16 +54,39 @@ function App() {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
       },
-    }).then((response) => setfetchedSongs(response.data.data.getSongs));
+    }).then((response) => {
+      setfetchedSongs(response.data.data.getSongs);
+      setFilteredSongs(response.data.data.getSongs);
+    });
   });
 
-  // const result = useQuery(ALL_SONGS);
+  const searchFilterFunction = (text) => {
+    if (text) {
+      const newData = fetchedSongs.filter(function (item) {
+        const itemData = item.title
+          ? item.title.toUpperCase().trimStart()
+          : "".toUpperCase().trimStart();
+        const textData = text.toUpperCase().trimStart();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredSongs(newData);
+      setSearchterm(text);
+    } else {
+      setFilteredSongs(fetchedSongs);
+      setSearchterm(text);
+    }
+  };
 
-  // useEffect(() => {
-  //   if (result.loading === false) {
-  //     setfetchedSongs(result.data.getSongs);
-  //   }
-  // }, [result]);
+  useEffect(() => {
+    setActiveCurrentPic(activeSong?.photo);
+
+    let activePic = activeCurrentPic
+      ? activeCurrentPic
+      : "https://images.genius.com/e95f361c27487088fd9dddf8c967bf89.500x500x1.jpg";
+    imageToGradient(activePic, options, function (err, cssGradient) {
+      setGradient(cssGradient);
+    });
+  }, [activeCurrentPic, activeSong]);
 
   const durationInSeconds = (duration) => {
     let formattedDuration = duration / 60;
@@ -77,7 +96,12 @@ function App() {
   };
 
   return (
-    <div className="app">
+    <div
+      className="app"
+      style={{
+        background: `${gradient}`,
+      }}
+    >
       <div className="container-fluid">
         <div className="left-section">
           <div>
@@ -105,43 +129,38 @@ function App() {
             <div className="search">
               <input
                 placeholder="Search song, artist"
-                onChange={({ target }) => setSearchterm(target.value)}
+                onChange={({ target }) => searchFilterFunction(target.value)}
               />
               <FiSearch className="search__icon" />
             </div>
           </div>
           <div className="playlist">
-            {fetchedSongs
-              .filter((val) => {
-                if (searchterm == " ") {
-                  return val.title;
-                } else if (
-                  val.title.toLowerCase().includes(searchterm.toLowerCase())
-                ) {
-                  return val.title;
-                }
-              })
-              .map((el, idx) => (
-                <div
-                  className="song"
-                  key={idx}
-                  onClick={() => setActiveSong(el)}
-                >
-                  <div className="song__container">
-                    <img src={el.photo} alt="Song Pic" className="song--pic" />
-                    <div className="song__info">
-                      <h4>{el.title}</h4>
-                      <p>{el.artist}</p>
-                    </div>
+            {filteredSongs.map((el, idx) => (
+              <div
+                className="song"
+                key={idx}
+                onClick={() => {
+                  setActiveSong(el);
+                }}
+              >
+                <div className="song__container">
+                  <img src={el.photo} alt="Song Pic" className="song--pic" />
+                  <div className="song__info">
+                    <h4>{el.title}</h4>
+                    <p>{el.artist}</p>
                   </div>
-                  <p className="song__duration">
-                    {durationInSeconds(el.duration)}
-                  </p>
                 </div>
-              ))}
+                <p className="song__duration">
+                  {durationInSeconds(el.duration)}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
-        <ActivePlayer song={activeSong ? activeSong : fetchedSongs[0]} />
+        <ActivePlayer
+          song={activeSong ? activeSong : fetchedSongs[0]}
+          data={fetchedSongs}
+        />
       </div>
 
       {showMobileNav ? (
