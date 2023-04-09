@@ -2,19 +2,24 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+// import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 
-const client = new ApolloClient({
-  uri: "https://api.ss.dev/resource/api",
-  cache: new InMemoryCache(),
-});
+// const client = new ApolloClient({
+//   uri: "https://api.ss.dev/resource/api",
+//   cache: new InMemoryCache(),
+// });
+
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
+    {/* <ApolloProvider client={client}> */}
+    <QueryClientProvider client={queryClient}>
       <App />
-    </ApolloProvider>
+    </QueryClientProvider>
+    {/* </ApolloProvider> */}
   </React.StrictMode>
 );
 

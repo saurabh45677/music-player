@@ -6,12 +6,29 @@ import { FiSearch } from "react-icons/fi";
 import ReactJkMusicPlayer from "react-jinke-music-player";
 import { BiMenuAltRight } from "react-icons/bi";
 import "react-jinke-music-player/assets/index.css";
-import { useQuery, gql } from "@apollo/client";
+// import { useQuery, gql } from "@apollo/client";
 import { useEffect, useState } from "react";
 import ActivePlayer from "./components/ActivePlayer";
 import { RxCrossCircled } from "react-icons/rx";
+import { useQuery } from "react-query";
+import axios from "axios";
 
-const ALL_SONGS = gql`
+// const ALL_SONGS = gql`
+//   query {
+//     getSongs(playlistId: 1) {
+//       _id
+//       artist
+//       duration
+//       photo
+//       title
+//       url
+//     }
+//   }
+// `;
+
+const endpoint = "https://api.ss.dev/resource/api";
+
+const ALL_SONGS = `
   query {
     getSongs(playlistId: 1) {
       _id
@@ -30,13 +47,27 @@ function App() {
   const [searchterm, setSearchterm] = useState(" ");
   const [showMobileNav, setShowMobileNav] = useState(false);
 
-  const result = useQuery(ALL_SONGS);
+  const { data, isLoading, error } = useQuery("launches", () => {
+    return axios({
+      url: endpoint,
+      method: "POST",
+      data: {
+        query: ALL_SONGS,
+      },
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+      },
+    }).then((response) => setfetchedSongs(response.data.data.getSongs));
+  });
 
-  useEffect(() => {
-    if (result.loading === false) {
-      setfetchedSongs(result.data.getSongs);
-    }
-  }, [result]);
+  // const result = useQuery(ALL_SONGS);
+
+  // useEffect(() => {
+  //   if (result.loading === false) {
+  //     setfetchedSongs(result.data.getSongs);
+  //   }
+  // }, [result]);
 
   const durationInSeconds = (duration) => {
     let formattedDuration = duration / 60;
